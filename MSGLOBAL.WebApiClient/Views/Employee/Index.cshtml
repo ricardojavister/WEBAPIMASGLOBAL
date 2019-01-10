@@ -1,0 +1,97 @@
+﻿@{
+    ViewBag.Title = " Employees ";
+}
+<h1>
+    Employees
+</h1>
+<input type="text" id="txtId" /> <input type="button" id="btnPost" value="Filter" />
+<br />
+<div>
+    <table id="tblEmployee" class="tblEmployee">
+        <thead>
+            
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#btnPost").click(function () {
+            /*var emp = new Object();
+            emp.id = $('#txtId').val();*/
+
+            var searchby = {
+                id: $('#txtId').val()
+            };
+
+            console.log(searchby);
+
+            $("#tblEmployee tbody tr").remove();
+            $.ajax({
+                type: 'POST',
+                data: searchby,
+                url: "/Employee/Index/",
+                //dataType: 'application/x-www-form-urlencoded; charset=utf-8',
+                success: function (data) {
+                    $("#imgLoading").hide();
+                    var items = '';
+                    var rows = "<tr>"
+                        + "<th class='EmployeeTableTH'>Employee ID</th><th class='EmployeeTableTH'>Name</th><th class='EmployeeTableTH'>contractTypeName</th><th class='EmployeeTableTH'>roleId</th><th class='EmployeeTableTH'>roleName</th><th class='EmployeeTableTH'>roleDescription</th><th  class='EmployeeTableTH'>hourlySalary</th><th class='EmployeeTableTH'>monthlySalary</th><th class='EmployeeTableTH'>annualSalary</th>"
+                        + "</tr>";
+                    $('#tblEmployee tbody').append(rows);
+
+                    $.each(data, function (i, item) {
+                        var rows = "<tr>"
+                            + "<td class='EmployeeTableTD'>" + item.id + "</td>"
+                            + "<td class='EmployeeTableTD'>" + item.name + "</td>"
+                            + "<td class='EmployeeTableTD'>" + item.contractTypeName + "</td>"
+                            + "<td class='EmployeeTableTD'>" + item.roleId + "</td>"
+                            + "<td class='EmployeeTableTD'>" + item.roleName + "</td>"
+                            + "<td class='EmployeeTableTD'>" + item.roleDescription + "</td>"
+                            + "<td class='EmployeeTableTD'>" + item.hourlySalary + "</td>"
+                            + "<td class='EmployeeTableTD'>" + item.monthlySalary + "</td>"
+                            + "<td class='EmployeeTableTD'>" + item.annualSalary + "</td>"
+                            + "</tr>";
+                        $('#tblEmployee tbody').append(rows);
+                    });
+                },
+                error: function (xhr, textStatus, error) {
+                    console.log(xhr.statusText);
+                    console.log(textStatus);
+                    console.log(error);
+                }
+            });
+            return false;
+        });
+    });
+</script>
+
+<style type="text/css">
+    .tblEmployee {
+        font-family: verdana,arial,sans-serif;
+        font-size: 11px;
+        color: #333333;
+        border-width: 1px;
+        border-color: #666666;
+        border-collapse: collapse;
+    }
+
+    .EmployeeTableTH {
+        border-width: 1px;
+        padding: 8px;
+        border-style: solid;
+        border-color: #666666;
+        background-color: #dedede;
+    }
+
+    .EmployeeTableTD {
+        border-width: 1px;
+        padding: 8px;
+        border-style: solid;
+        border-color: #666666;
+        background-color: #ffffff;
+        text-align:center;
+    }
+</style>
+
